@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/11/23 20:23:36 by lterrail         ###   ########.fr        #
+#    Updated: 2018/11/24 17:02:52 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRC	=	main.c						\
 		path_maker.c				\
 		unset_set_env.c				\
 		exec_cmd.c					\
+		exec_cd.c					\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
 

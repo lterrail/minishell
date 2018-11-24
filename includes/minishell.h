@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 12:46:19 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 18:34:38 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct		s_ms
 	char			*pwd;
 	char			*first_argc;
 	char			**options;
+	char			*prompt;
 }					t_ms;
 
 int					ft_search_cmd_in_paths(t_ms *ms, char *line);
@@ -45,6 +46,9 @@ int					ft_unsetenv(t_ms *ms, char *line);
 void				ft_print_env(t_ms *ms);
 int					ft_setenv(t_ms *ms, char *line);
 void				ft_free_tab(char **tab, int len);
-int					ft_init_exec_cmd(t_ms *ms, char *cmd, char *line, int flag);
+void				ft_exec_cmd(t_ms *ms, char *path, char *line);
+void				ft_exec_cmd_with_path(t_ms *ms, char *path, char *line);
+void				ft_exec_cd(t_ms *ms, char *line);
+char				*ft_get_pwd();
 
 #endif

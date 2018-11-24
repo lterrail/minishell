@@ -6,50 +6,66 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 20:23:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 12:52:21 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 18:50:54 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		ft_exec_cmd(t_ms *ms, char *cmd, int flag)
+void		ft_exec_cmd(t_ms *ms, char *path, char *line)
 {
-	char	*tmp;
-	char	*path;
+	pid_t	father;
+	int		ret;
 
-	path = NULL;
-	tmp = NULL;
-	if (!flag && !(tmp = ft_strdup("/bin")))
-		ft_exit(ms, NULL, "Failed to malloc in ft_exec_cmd");
-	if (!flag && ft_search_cmd_in_paths(ms, tmp))
-	{
-		if (!(path = ft_strjoin(tmp, cmd)))
-			ft_exit(ms, tmp, "Failed to malloc in ft_exec_cmd");
-		free(tmp);
-		if ((execve(path, ms->options, NULL)) == -1)
-			ft_exit(ms, NULL, "Failed to execve the program");
-	}
-	else if ((execve(cmd, ms->options, NULL)) == -1)
-		ft_exit(ms, tmp, "Failed to execve the program");
-	else
-		ft_printf("{red}Can't find the path /bin in env{eoc}\n");
-}
-
-int				ft_init_exec_cmd(t_ms *ms, char *cmd, char *line, int flag)
-{
+	ret = 0;
 	if (!(ms->options = ft_strsplit(line, ' ')))
-		ft_exit(ms, line, "Failed to create ms->options");
-	if (!flag && !(ft_find_and_copy_paths(ms, ms->env)))
 	{
-		ft_free_tab(ms->options, -1);
-		ms->options = NULL;
-		ft_printf("{red}Can't find the path /bin in env{eoc}\n");
-		return (E_ERROR);
+		free(path);
+		ft_exit(ms, line, "Failed to create ms->options");
 	}
-	ft_exec_cmd(ms, cmd, flag);
+	if ((father = fork()) == -1)
+		ft_exit(ms, path, "Failed to fork");
+	if (father > 0)
+		wait(&father);
+	else if (father == 0)
+	{
+		if ((ret = execve(path, ms->options, ms->env)) == -1)
+		{
+			free(path);
+			ft_exit(ms, line, "Failed to execve the program");
+		}
+		exit(ret);
+	}
 	ft_free_tab(ms->options, -1);
 	ms->options = NULL;
-	ft_free_tab(ms->paths, -1);
-	ms->paths = NULL;
-	return (E_SUCCESS);
+}
+
+static int            exec_chmod(char *path)
+{
+	struct stat    stat;
+
+	lstat(path, &stat);
+	if (S_ISLNK(stat.st_mode) == 1)
+		return (0);
+	else if (S_ISFIFO(stat.st_mode) == 1)
+		return (0);
+	else if (S_ISBLK(stat.st_mode) == 1)
+		return (0);
+	else if (S_ISCHR(stat.st_mode) == 1)
+		return (0);
+	else if (S_ISSOCK(stat.st_mode) == 1)
+		return (0);
+	else if (S_ISDIR(stat.st_mode) == 1)
+		return (0);
+	return (1);
+}
+
+void		ft_exec_cmd_with_path(t_ms *ms, char *path, char *line)
+{
+	struct stat	stat;
+
+	if (lstat(path, &stat) == -1 || !exec_chmod(path))
+		ft_printf("{red}No such file or directory{eoc}\n");
+	else
+		ft_exec_cmd(ms, path, line);
 }

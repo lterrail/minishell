@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 12:19:45 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 16:59:38 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	ft_realloc_msenv(t_ms *ms, char *line)
 
 	i = 0;
 	new = NULL;
-	if (!(new = (char **)malloc(sizeof(char *) * ms->len_env)))
+	if (!(new = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
 		ft_exit(ms, NULL, "Failed to realloc ms->env");
 	while (i < ms->len_env)
 	{
@@ -49,6 +49,7 @@ static void	ft_realloc_msenv(t_ms *ms, char *line)
 	}
 	free(ms->env);
 	ms->env = new;
+	ms->env[ms->len_env] = NULL;
 }
 
 int			ft_setenv(t_ms *ms, char *line)
@@ -56,6 +57,20 @@ int			ft_setenv(t_ms *ms, char *line)
 	int		i;
 
 	i = 0;
+	while (i < ms->len_env)
+	{
+		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
+		{
+			ft_printf("%s already exist\n", line);
+			ft_printf(" {red}[old] -> %s\n", ms->env[i]);
+			free(ms->env[i]);
+			if (!(ms->env[i] = ft_strdup(line)))
+				ft_exit(ms, NULL, "Failed to add new variable in env");
+			ft_printf("{green} [new] -> %s{eoc}\n", line);
+			return (E_SUCCESS);
+		}
+		i++;
+	}
 	ms->len_env++;
 	ft_printf("{green}Add: %s{eoc}\n", line);
 	ft_realloc_msenv(ms, line);
@@ -71,7 +86,7 @@ int			ft_unsetenv(t_ms *ms, char *line)
 		return (E_ERROR);
 	while (i < ms->len_env)
 	{
-		if (line && ft_strstr(ms->env[i], line))
+		if (line && !ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
 		{
 			ft_printf("{red}Deleted: %s{eoc}\n", ms->env[i]);
 			free(ms->env[i]);

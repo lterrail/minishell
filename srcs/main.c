@@ -6,11 +6,13 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 11:50:49 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 18:37:27 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
+
 
 static void		ft_copy_env(t_ms *ms, char **env)
 {
@@ -19,7 +21,7 @@ static void		ft_copy_env(t_ms *ms, char **env)
 	i = 0;
 	while (env[ms->len_env])
 		ms->len_env++;
-	if (!(ms->env = (char **)malloc(sizeof(char *) * ms->len_env)))
+	if (!(ms->env = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
 		ft_exit(ms, NULL, "Failed to malloc env");
 	while (i < ms->len_env)
 	{
@@ -27,6 +29,7 @@ static void		ft_copy_env(t_ms *ms, char **env)
 			ft_exit(ms, NULL, "Failed to malloc env");
 		i++;
 	}
+	ms->env[ms->len_env] = NULL;
 }
 
 static t_ms		*ft_init_ms(t_ms *ms, char **env)
@@ -38,11 +41,27 @@ static t_ms		*ft_init_ms(t_ms *ms, char **env)
 	ms->len_env = 0;
 	ms->first_argc = NULL;
 	ms->options = NULL;
-	if (!(ms->pwd = ft_strdup("Minishell")))
-		ft_exit(ms, NULL, "Failed to malloc ms->pwd");
+	ms->len_env = 0;
+	ms->env = NULL;
+	ms->pwd = NULL;
+	// ms->prompt = ft_strdup("minichell");
+	ms->prompt = NULL;
 	ft_copy_env(ms, env);
 	return (ms);
 }
+
+// static char		*ft_get_last_argc(char *str)
+// {
+// 	int		i;
+//
+// 	i = 0;
+// 	while (str[i])
+// 		i++;
+// 	i--;
+// 	while (i > 1 && str[i] != '/')
+// 		i--;
+// 	return (&str[i]);
+// }
 
 int				main(int ac, char **av, char **env)
 {
@@ -56,10 +75,12 @@ int				main(int ac, char **av, char **env)
 	ms = ft_init_ms(ms, env);
 	while (1)
 	{
-		ft_printf("{cyan} %s{eoc} ", ms->pwd);
+		ft_get_pwd();
+		// printf("%s ", ms->prompt);
+		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
+		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
 		get_next_line(0, &line);
 		ft_parse_cmd(ms, line);
-		free(line);
 	}
 	return (0);
 }
