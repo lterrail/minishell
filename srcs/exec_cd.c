@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:02:03 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 18:53:53 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 18:58:52 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ char		*ft_get_pwd(void)
 	bzero(current_dir, PATH_MAX);
 	if (!(ptr = getcwd(current_dir, PATH_MAX)))
 		return (EXIT_SUCCESS);
+	printf("%s ", ptr);
+	// printf("%p\n", buf);
+	// printf("%p\n", pwd);
 	return (ptr);
 }
 

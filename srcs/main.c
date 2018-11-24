@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 18:37:27 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/24 18:59:59 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,10 @@ int				main(int ac, char **av, char **env)
 	ms = NULL;
 	line = NULL;
 	ms = ft_init_ms(ms, env);
+	ms->prompt = ft_get_pwd();
 	while (1)
 	{
-		ft_get_pwd();
+		ft_printf("%s> ", ms->prompt);
 		// printf("%s ", ms->prompt);
 		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
 		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
