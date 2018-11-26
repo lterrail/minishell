@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:19 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 12:00:46 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/26 16:11:14 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ void		ft_exit(t_ms *ms, char *str, char *msg)
 		free(ms->pwd);
 	if (ms->first_argc)
 		free(ms->first_argc);
+	if (ms->old_pwd)
+		free(ms->old_pwd);
+	if (ms->pwd)
+		free(ms->pwd);
 	if (ms)
 		free(ms);
 	exit(0);

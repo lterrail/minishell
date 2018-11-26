@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 18:59:59 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/26 20:12:18 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,25 +43,14 @@ static t_ms		*ft_init_ms(t_ms *ms, char **env)
 	ms->options = NULL;
 	ms->len_env = 0;
 	ms->env = NULL;
-	ms->pwd = NULL;
-	// ms->prompt = ft_strdup("minichell");
 	ms->prompt = NULL;
+	ms->pwd = NULL;
+	ms->old_pwd = NULL;
+	ms->first_call = 1;
+	ms->error = 0;
 	ft_copy_env(ms, env);
 	return (ms);
 }
-
-// static char		*ft_get_last_argc(char *str)
-// {
-// 	int		i;
-//
-// 	i = 0;
-// 	while (str[i])
-// 		i++;
-// 	i--;
-// 	while (i > 1 && str[i] != '/')
-// 		i--;
-// 	return (&str[i]);
-// }
 
 int				main(int ac, char **av, char **env)
 {
@@ -69,17 +58,18 @@ int				main(int ac, char **av, char **env)
 	(void)av;
 	char	*line;
 	t_ms	*ms;
+	int		i;
 
+	i = 0;
 	ms = NULL;
 	line = NULL;
 	ms = ft_init_ms(ms, env);
-	ms->prompt = ft_get_pwd();
 	while (1)
 	{
-		ft_printf("%s> ", ms->prompt);
-		// printf("%s ", ms->prompt);
-		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
-		// ft_printf(" {cyan}%s{eoc} ", ms->prompt);
+		if (!(i = ft_find_env_variable(ms, "PWD=")))
+			ft_printf("prompt:> ");
+		else
+			ft_printf(" {cyan}%s{eoc} ", ft_get_last_argc(ms->env[i]));
 		get_next_line(0, &line);
 		ft_parse_cmd(ms, line);
 	}

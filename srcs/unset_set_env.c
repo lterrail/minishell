@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 16:59:38 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/26 14:00:07 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ int			ft_setenv(t_ms *ms, char *line)
 	int		i;
 
 	i = 0;
+	if (!line)
+	{
+		ft_printf("{red}usage: setenv [variable]{eoc}\n");
+		return (E_ERROR);
+	}
 	while (i < ms->len_env)
 	{
 		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
@@ -82,8 +87,11 @@ int			ft_unsetenv(t_ms *ms, char *line)
 	int		i;
 
 	i = 0;
-	if (ft_strlen(&line[i]) < 1)
+	if (!line)
+	{
+		ft_printf("{red}usage: unsetenv [variable]{eoc}\n");
 		return (E_ERROR);
+	}
 	while (i < ms->len_env)
 	{
 		if (line && !ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))

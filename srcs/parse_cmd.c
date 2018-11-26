@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 18:53:08 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/26 19:06:12 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,44 @@ static char		*ft_check_access(t_ms *ms)
 	return (NULL);
 }
 
+static char		*ft_check_line(char *line, int len)
+{
+	int		i;
+
+	i = len;
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+		i++;
+	if (line[i])
+		return (&line[i]);
+	return (NULL);
+}
+
 int				ft_parse_cmd(t_ms *ms, char *line)
 {
 	char	*path;
+	char	*tmp;
 
+	tmp = line;
 	path = NULL;
+	line = ft_check_line(line, 0);
+	if (!line)
+		return (E_ERROR);
 	ft_get_first_argc(ms, line);
 	if (!ft_strcmp(ms->first_argc, "exit"))
 		ft_exit(ms, line, NULL);
 	else if (!ft_strcmp(ms->first_argc, "cd"))
-		ft_exec_cd(ms, &line[3]);
+		ft_init_cd(ms, ft_check_line(line, 2));
 	else if (!ft_strcmp(ms->first_argc, "unsetenv"))
-		ft_unsetenv(ms, &line[9]);
+		ft_unsetenv(ms, ft_check_line(line, 8));
 	else if (!ft_strcmp(ms->first_argc, "setenv"))
-		ft_setenv(ms, &line[7]);
+		ft_setenv(ms, ft_check_line(line, 6));
 	else if (!ft_strcmp(ms->first_argc, "env"))
 		ft_print_env(ms);
 	else if (!ft_strcmp(ms->first_argc, "echo"))
-		ft_printf("%s\n", &line[5]);
+	{
+		if ((line = ft_check_line(line, 4)))
+			ft_printf("%s\n", line);
+	}
 	else if (!ft_strcmp(ms->first_argc, "path"))
 		ft_print_paths(ms);
 	else if ((path = ft_check_access(ms)))
@@ -98,6 +118,6 @@ int				ft_parse_cmd(t_ms *ms, char *line)
 	free(ms->first_argc);
 	if (path)
 		free(path);
-	free(line);
+	free(tmp);
 	return (E_SUCCESS);
 }
