@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/11/26 19:46:19 by lterrail         ###   ########.fr        #
+#    Updated: 2018/11/28 20:14:36 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,16 @@ NAME	= minishell
 
 SRC	=	main.c						\
 		exit.c						\
-		parse_cmd.c					\
+		parser.c					\
 		find_variable_in_env.c		\
 		unset_set_env.c				\
 		exec_cmd.c					\
 		exec_cd.c					\
-		exec_cd_functions.c			\
 		utils.c						\
+		search_builtin.c			\
+		env_i.c						\
+		chdir.c						\
+		signal.c					\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
 

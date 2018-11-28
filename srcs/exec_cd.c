@@ -6,98 +6,95 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:02:03 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/26 20:28:18 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/28 19:26:52 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		ft_parse_cd(t_ms *ms, char *argcs)
+static void		ft_add_oldpwd_in_env(t_ms *ms, char *line)
 {
-	ft_printf("%s\n", argcs);
-	if (!ft_strcmp(argcs, ".."))
-		ft_del_last_argc(ms);
-	else if (!ft_strcmp(argcs, "-"))
-		ft_swap_argcs(ms);
-	else if (!ft_strcmp(argcs, "~") || !argcs)
-		ft_get_home(ms);
-	else
-		ft_add_argc(ms, argcs);
+	char	*tmp;
+
+	tmp = NULL;
+	if (!(tmp = ft_strjoin("OLDPWD=", ms->old_pwd)))
+		ft_exit(ms, line, "Failed to malloc in ft_add_oldpwd");
+	ft_setenv(ms, tmp, 1);
+	free(tmp);
 }
 
-static void		ft_chdir(t_ms *ms)
+static int		ft_check_tild(t_ms *ms, char *line)
 {
 	int		i;
 
-	i = ft_find_env_variable(ms, "PWD=");
-	if (!chdir(ms->pwd) && ms->error == 0)
+	i = 0;
+	if (!line || (line && line[0] == '~'))
 	{
-		free(ms->env[i]);
-		if (!(ms->env[i] = ft_strjoin("PWD=", ms->pwd)))
-			ft_exit(ms, NULL, "Failed to malloc");
+		if (!(i = ft_find_env_variable(ms, "HOME=")))
+		{
+			ft_printf("{red}Variable in env HOME= doesn't exist{eoc}\n");
+			return (E_ERROR);
+		}
+		else
+			return (i);
 	}
 	else
-		ft_printf("{red}No such file or directory{eoc}\n");
+		return (E_SUCCESS);
 }
 
-static int		ft_solve_one_argc_cd(t_ms *ms, char *line)
+static int		ft_solve_simple_case(t_ms *ms, char *line)
 {
-	char	cwd[1024];
+	int		i;
+	char	*tmp;
 
+	i = 0;
+	if (!(i = ft_check_tild(ms, line)))
+		return (E_ERROR);
 	if (!line)
 	{
-		ft_get_home(ms);
-		ft_chdir(ms);
+		ft_chdir(ms, &ms->env[i][5]);
 		return (E_ERROR);
 	}
-	if (line[0] != '-' || ms->first_call == 1)
+	else if (line && line[0] == '~')
 	{
-		if (!(ms->pwd = ft_strdup(getcwd(cwd, sizeof(cwd)))))
-			ft_exit(ms, line, "Failed to malloc");
-		if (!(ms->old_pwd = ft_strdup(getcwd(cwd, sizeof(cwd)))))
-			ft_exit(ms, line, "Failed to malloc");
-		ms->first_call = 0;
-	}
-	else if (line[0] == '/')
-		ms->pwd = ft_strdup("/");
-	else if (!ft_strcmp(line, "."))
+		if (!(tmp = ft_strjoin(&ms->env[i][5], &line[1])))
+			ft_exit(ms, line, "Failed to malloc in ft_solve_simple_case");
+		ft_chdir(ms, tmp);
+		free(tmp);
 		return (E_ERROR);
+	}
+	if (!ft_strcmp(line, "-") && ms->first_call == 1)
+		return (E_ERROR);
+	else if (!ft_strcmp(line, "-") && ms->first_call == 0)
+		return (E_SUCCESS);
+	ms->first_call = 0;
 	return (E_SUCCESS);
 }
 
 void			ft_init_cd(t_ms *ms, char *line)
 {
-	char	**argcs;
 	int		i;
+	char	*tmp;
 
-	i = 0;
-	argcs = NULL;
-	ms->error = 0;
+	tmp = NULL;
+	i = -1;
 	if (!ft_find_env_variable(ms, "PWD="))
 	{
-		ft_printf("{red} variable PWD=/ doesn't exist{eoc}\n");
+		ft_printf("{red}Variable in env PWD= doesn't exist{eoc}\n");
 		return ;
 	}
-	if (!ft_solve_one_argc_cd(ms, line))
+	if (line && line[0] != '-')
+		ft_free_cd(ms);
+	if (!ft_solve_simple_case(ms, line))
 		return ;
-	if (!(argcs = ft_strsplit(line, '/')))
-		ft_exit(ms, line, "Failed to malloc cd argcs");
-	while (argcs[i])
+	if (!ft_strcmp(line, "-"))
 	{
-		ft_parse_cd(ms, argcs[i]);
-		i++;
+		tmp = ms->old_pwd;
+		ms->old_pwd = ms->pwd;
+		ms->pwd = tmp;
+		ft_chdir_back(ms, ms->pwd);
 	}
-	ft_chdir(ms);
-	// if (ms->pwd)
-	// {
-	// 	free(ms->pwd);
-	// 	ms->pwd = NULL;
-	// }
-	// if (ms->old_pwd)
-	// {
-	// 	free(ms->old_pwd);
-	// 	ms->old_pwd = NULL;
-	// }
-	if (argcs)
-		ft_free_tab(argcs, -1);
+	else
+		ft_chdir(ms, line);
+	ft_add_oldpwd_in_env(ms, line);
 }

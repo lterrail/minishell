@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/26 14:00:07 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/28 20:20:36 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void		ft_print_env(t_ms *ms)
 		ft_printf("%s\n", ms->env[i]);
 		i++;
 	}
+	if (i == 0)
+		ft_printf("{red}No variable in env{eoc}\n");
 }
 
 static void	ft_realloc_msenv(t_ms *ms, char *line)
@@ -52,29 +54,35 @@ static void	ft_realloc_msenv(t_ms *ms, char *line)
 	ms->env[ms->len_env] = NULL;
 }
 
-int			ft_setenv(t_ms *ms, char *line)
+static int	ft_is_line(char *line, char *str)
+{
+	if (!line)
+	{
+		ft_printf("{red}usage: %s [variable]{eoc}\n", str);
+		return (E_ERROR);
+	}
+	return (E_SUCCESS);
+}
+
+int			ft_setenv(t_ms *ms, char *line, int flag)
 {
 	int		i;
 
-	i = 0;
-	if (!line)
-	{
-		ft_printf("{red}usage: setenv [variable]{eoc}\n");
+	i = -1;
+	if (!ft_is_line(line, "setenv"))
 		return (E_ERROR);
-	}
-	while (i < ms->len_env)
+	while (++i < ms->len_env)
 	{
 		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
 		{
-			ft_printf("%s already exist\n", line);
-			ft_printf(" {red}[old] -> %s\n", ms->env[i]);
+			!flag ? ft_printf("%s already exist\n", line) : 0;
+			!flag ? ft_printf(" {red}[old] -> %s\n", ms->env[i]) : 0;
 			free(ms->env[i]);
 			if (!(ms->env[i] = ft_strdup(line)))
 				ft_exit(ms, NULL, "Failed to add new variable in env");
-			ft_printf("{green} [new] -> %s{eoc}\n", line);
+			!flag ? ft_printf("{green} [new] -> %s{eoc}\n", line) : 0;
 			return (E_SUCCESS);
 		}
-		i++;
 	}
 	ms->len_env++;
 	ft_printf("{green}Add: %s{eoc}\n", line);
@@ -86,30 +94,26 @@ int			ft_unsetenv(t_ms *ms, char *line)
 {
 	int		i;
 
-	i = 0;
-	if (!line)
-	{
-		ft_printf("{red}usage: unsetenv [variable]{eoc}\n");
+	i = -1;
+	if (!ft_is_line(line, "unsetenv"))
 		return (E_ERROR);
-	}
-	while (i < ms->len_env)
+	while (++i < ms->len_env)
 	{
-		if (line && !ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
+		if (line
+			&& !ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
 		{
 			ft_printf("{red}Deleted: %s{eoc}\n", ms->env[i]);
 			free(ms->env[i]);
-			while (i + 1 < ms->len_env)
+			while (++i + 1 < ms->len_env)
 			{
 				if (!(ms->env[i] = ft_strdup(ms->env[i + 1])))
 					ft_exit(ms, NULL, "Failed to realloc each env line");
 				free(ms->env[i + 1]);
-				i++;
 			}
 			ms->len_env--;
 			ft_realloc_msenv(ms, NULL);
 			return (E_SUCCESS);
 		}
-		i++;
 	}
 	ft_printf("{red}Unsetenv %s not found{eoc}\n", line);
 	return (E_ERROR);
