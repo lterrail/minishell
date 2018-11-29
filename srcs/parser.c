@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:59:28 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 19:41:20 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,11 @@ static int		ft_parse_builtins(t_ms *ms, char *line)
 	else if (!ft_strcmp(ms->first_argc, "setenv"))
 		ft_setenv(ms, ft_epur_line(line, 6), 0);
 	else if (!ft_strcmp(line, "env -i"))
-	{
-		ft_free_tab(ms->env, ms->len_env);
-		ms->len_env = 0;
-		if (!(ms->env = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
-			ft_exit(ms, NULL, "Failed to malloc env");
-		ms->env[ms->len_env] = NULL;
-	}
+		ft_delete_env(ms);
 	else if (!ft_strcmp(ms->first_argc, "env"))
-		ft_print_env(ms);
+		ft_print_env(ms, line);
 	else if (!ft_strcmp(ms->first_argc, "echo"))
-		(line = ft_epur_line(line, 4)) ? 0 : ft_printf("%s\n", line);
+		(line = ft_epur_line(line, 4)) ? ft_printf("%s\n", line) : 0;
 	else
 		return (0);
 	return (1);

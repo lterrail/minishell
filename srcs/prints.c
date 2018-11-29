@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 17:54:43 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:55:17 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 20:23:28 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,35 @@ void		ft_print_paths(t_ms *ms)
 		ft_printf("{red}PATH=/ Not found{eoc}\n");
 }
 
-void		ft_print_env(t_ms *ms)
+// static void	ft_print_env_args(char *line)
+// {
+// 	int		i;
+//
+// 	i = 0;
+// 	while (line[i] && line[i] != '=')
+// 	{
+// 		ft_printf("line: %s\n", line);
+// 		if (line[i] == '=')
+// 		{
+// 			i--;
+// 			while (line[i] && line[i] != ' ')
+// 			{
+// 				ft_putchar(line[i]);
+// 				i++;
+// 			}
+// 			ft_putchar('\n');
+// 		}
+// 		i++;
+// 	}
+// }
+
+void		ft_print_env(t_ms *ms, char *line)
 {
 	int		i;
 
 	i = 0;
-	if (!ms->env)
+	(void)line;
+	if (!ms->env || !ms->len_env)
 	{
 		ft_printf("{red}No variable in env{eoc}\n");
 		return ;
@@ -43,14 +66,15 @@ void		ft_print_env(t_ms *ms)
 		ft_printf("%s\n", ms->env[i]);
 		i++;
 	}
-	if (i == 0)
-		ft_printf("{red}No variable in env{eoc}\n");
+	// ft_print_env_args(line);
 }
 
 void		ft_print_prompt(void)
 {
 	char	cwd[1024];
 
-	getcwd(cwd, sizeof(cwd));
-	ft_printf(" {cyan}%s{eoc} ", ft_get_last_argc(cwd));
+	if (!getcwd(cwd, sizeof(cwd)))
+		ft_printf("\n :> ");
+	else
+		ft_printf(" {cyan}%s{eoc} ", ft_get_last_argc(cwd));
 }

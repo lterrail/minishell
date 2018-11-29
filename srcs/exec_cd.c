@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:02:03 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 14:03:28 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 19:07:03 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,23 @@ static int		ft_check_tild(t_ms *ms, char *line)
 		return (E_SUCCESS);
 }
 
-static int		ft_solve_simple_case(t_ms *ms, char *line)
+static int		ft_solve_simple_case(t_ms *ms, char *line, int i)
 {
-	int		i;
 	char	*tmp;
+	int		j;
 
-	i = 0;
-	if (!(i = ft_check_tild(ms, line)))
+	if (!(j = ft_check_tild(ms, line)))
 		return (E_ERROR);
 	if (!line)
 	{
-		ft_chdir(ms, &ms->env[i][5]);
+		ft_chdir(ms, &ms->env[j][5], i);
 		return (E_ERROR);
 	}
 	else if (line && line[0] == '~')
 	{
-		if (!(tmp = ft_strjoin(&ms->env[i][5], &line[1])))
+		if (!(tmp = ft_strjoin(&ms->env[j][5], &line[1])))
 			ft_exit(ms, NULL, "Failed to malloc in ft_solve_simple_case");
-		ft_chdir(ms, tmp);
+		ft_chdir(ms, tmp, i);
 		free(tmp);
 		return (E_ERROR);
 	}
@@ -77,24 +76,24 @@ void			ft_init_cd(t_ms *ms, char *line)
 	char	*tmp;
 
 	tmp = NULL;
-	i = -1;
-	if (!ft_find_env_variable(ms, "PWD="))
+	i = 0;
+	if (!(i = ft_find_env_variable(ms, "PWD=")))
 	{
 		ft_printf("{red}Variable in env PWD= doesn't exist{eoc}\n");
 		return ;
 	}
 	if (line && line[0] != '-')
 		ft_free_cd(ms);
-	if (!ft_solve_simple_case(ms, line))
+	if (!ft_solve_simple_case(ms, line, i))
 		return ;
 	if (!ft_strcmp(line, "-"))
 	{
 		tmp = ms->old_pwd;
 		ms->old_pwd = ms->pwd;
 		ms->pwd = tmp;
-		ft_chdir_back(ms, ms->pwd);
+		ft_chdir_back(ms, ms->pwd, i);
 	}
 	else
-		ft_chdir(ms, line);
+		ft_chdir(ms, line, i);
 	ft_add_oldpwd_in_env(ms);
 }

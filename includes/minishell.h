@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:56:35 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 20:14:53 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int					ft_parser(t_ms *ms, char *line);
 int					ft_find_and_copy_paths(t_ms *ms, char **env);
 void				ft_exit(t_ms *ms, char *str, char *msg);
 int					ft_unsetenv(t_ms *ms, char *line);
-void				ft_print_env(t_ms *ms);
+void				ft_print_env(t_ms *ms, char *line);
 int					ft_setenv(t_ms *ms, char *line, int flag);
 void				ft_free_tab(char **tab, int len);
 void				ft_exec_cmd(t_ms *ms, char *path, char *line);
@@ -64,9 +64,10 @@ void				ft_print_paths(t_ms *ms);
 void				ft_get_first_argc(t_ms *ms, char *line);
 char				*ft_epur_line(char *line, int len);
 void				ft_env_i(t_ms *ms, char *line);
-void				ft_chdir_back(t_ms *ms, char *line);
-void				ft_chdir(t_ms *ms, char *line);
+void				ft_chdir_back(t_ms *ms, char *line, int i);
+void				ft_chdir(t_ms *ms, char *line, int i);
 void				ft_signal_handler(int sig);
 void				ft_print_prompt(void);
+void				ft_delete_env(t_ms *ms);
 
 #endif

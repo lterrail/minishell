@@ -6,17 +6,14 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 19:21:41 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:17:46 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 19:04:10 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		ft_chdir_back(t_ms *ms, char *line)
+void		ft_chdir_back(t_ms *ms, char *line, int i)
 {
-	int		i;
-
-	i = ft_find_env_variable(ms, "PWD=");
 	if (access(line, F_OK) != 0)
 	{
 		ms->first_call = 1;
@@ -35,12 +32,10 @@ void		ft_chdir_back(t_ms *ms, char *line)
 	}
 }
 
-void		ft_chdir(t_ms *ms, char *line)
+void		ft_chdir(t_ms *ms, char *line, int i)
 {
-	int		i;
 	char	cwd[1024];
 
-	i = ft_find_env_variable(ms, "PWD=");
 	if (!(ms->old_pwd = ft_strdup(&ms->env[i][4])))
 		ft_exit(ms, NULL, "Failed to malloc");
 	if (access(line, F_OK) != 0)

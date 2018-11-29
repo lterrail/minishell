@@ -6,11 +6,20 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:55:05 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 18:07:43 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void		ft_delete_env(t_ms *ms)
+{
+	ft_free_tab(ms->env, ms->len_env);
+	ms->len_env = 0;
+	if (!(ms->env = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
+		ft_exit(ms, NULL, "Failed to malloc env");
+	ms->env[ms->len_env] = NULL;
+}
 
 static void	ft_realloc_msenv(t_ms *ms, char *line)
 {
