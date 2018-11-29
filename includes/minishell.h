@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 13:55:27 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:56:35 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define E_ERROR 0
 
 typedef void	(*t_sighandler)(int);
+
+int g_reset_input;
 
 typedef struct		s_ms
 {
@@ -60,10 +62,11 @@ void				ft_free_cd(t_ms *ms);
 char				*ft_search_valid_builtin(t_ms *ms);
 void				ft_print_paths(t_ms *ms);
 void				ft_get_first_argc(t_ms *ms, char *line);
-char				*ft_check_line(char *line, int len);
+char				*ft_epur_line(char *line, int len);
 void				ft_env_i(t_ms *ms, char *line);
 void				ft_chdir_back(t_ms *ms, char *line);
 void				ft_chdir(t_ms *ms, char *line);
 void				ft_signal_handler(int sig);
+void				ft_print_prompt(void);
 
 #endif

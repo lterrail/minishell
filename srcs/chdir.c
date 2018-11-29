@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 19:21:41 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 14:02:53 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:17:46 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void		ft_chdir_back(t_ms *ms, char *line)
 	if (access(line, F_OK) != 0)
 	{
 		ms->first_call = 1;
-		ft_printf("{red}cd: no such file or directory: %s{eoc}\n", line);
+		ft_printf("{red}cd: No such file or directory: %s{eoc}\n", line);
 	}
 	else if (access(line, X_OK) != 0)
 	{
 		ms->first_call = 1;
-		ft_printf("{red}cd: permission denied: %s{eoc}\n", line);
+		ft_printf("{red}cd: Permission denied: %s{eoc}\n", line);
 	}
 	else if (!chdir(line))
 	{
@@ -46,12 +46,12 @@ void		ft_chdir(t_ms *ms, char *line)
 	if (access(line, F_OK) != 0)
 	{
 		ms->first_call = 1;
-		ft_printf("{red}cd: no such file or directory: %s{eoc}\n", line);
+		ft_printf("{red}cd: No such file or directory: %s{eoc}\n", line);
 	}
 	else if (access(line, X_OK) != 0)
 	{
 		ms->first_call = 1;
-		ft_printf("{red}cd: permission denied: %s{eoc}\n", line);
+		ft_printf("{red}cd: Permission denied: %s{eoc}\n", line);
 	}
 	else if (!chdir(line))
 	{

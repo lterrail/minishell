@@ -6,25 +6,11 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 12:05:25 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:55:05 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void		ft_print_env(t_ms *ms)
-{
-	int		i;
-
-	i = 0;
-	while (i < ms->len_env)
-	{
-		ft_printf("%s\n", ms->env[i]);
-		i++;
-	}
-	if (i == 0)
-		ft_printf("{red}No variable in env{eoc}\n");
-}
 
 static void	ft_realloc_msenv(t_ms *ms, char *line)
 {

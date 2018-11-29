@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 12:11:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 14:04:52 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:55:56 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,6 @@ char		*ft_get_last_argc(char *str)
 	return (&str[i]);
 }
 
-void		ft_print_paths(t_ms *ms)
-{
-	int		i;
-
-	i = -1;
-	if (ft_find_and_copy_paths(ms, ms->env))
-	{
-		while (ms->paths[++i])
-			ft_printf("%s\n", ms->paths[i]);
-		ft_free_tab(ms->paths, -1);
-		ms->paths = NULL;
-	}
-	else
-		ft_printf("{red}PATH=/ Not found{eoc}\n");
-}
-
 void		ft_get_first_argc(t_ms *ms, char *line)
 {
 	int		i;
@@ -58,7 +42,7 @@ void		ft_get_first_argc(t_ms *ms, char *line)
 	ms->first_argc[i] = '\0';
 }
 
-char		*ft_check_line(char *line, int len)
+char		*ft_epur_line(char *line, int len)
 {
 	int		i;
 

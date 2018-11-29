@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 14:31:26 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 17:55:13 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,27 +49,17 @@ static t_ms		*ft_init_ms(t_ms *ms, char **env)
 	return (ms);
 }
 
-static void		ft_print_prompt(void)
-{
-	char	cwd[1024];
-
-	getcwd(cwd, sizeof(cwd));
-	ft_printf(" {cyan}%s{eoc} ", ft_get_last_argc(cwd));
-}
-
 static void		ft_init_parser(t_ms *ms, char *line)
 {
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (!(ms->argcs = ft_strsplit(line, ';')))
 		ft_exit(ms, line, "Failed to malloc strplit in main");
 	free(line);
-	i = -1;
 	while (ms->argcs[++i])
 		ft_parser(ms, ms->argcs[i]);
 	ft_free_tab(ms->argcs, -1);
-	ms->argcs = NULL;
 }
 
 int				main(int ac, char **av, char **env)
@@ -81,6 +71,7 @@ int				main(int ac, char **av, char **env)
 	(void)av;
 	ms = NULL;
 	ms = ft_init_ms(ms, env);
+	g_reset_input = 0;
 	signal(SIGINT, ft_signal_handler);
 	while (1)
 	{
