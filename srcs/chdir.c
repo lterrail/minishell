@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 19:21:41 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 19:22:04 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:02:53 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void		ft_chdir_back(t_ms *ms, char *line)
 	{
 		free(ms->env[i]);
 		if (!(ms->env[i] = ft_strjoin("PWD=", ms->pwd)))
-			ft_exit(ms, line, "Failed to malloc");
+			ft_exit(ms, NULL, "Failed to malloc");
 	}
 }
 
@@ -42,7 +42,7 @@ void		ft_chdir(t_ms *ms, char *line)
 
 	i = ft_find_env_variable(ms, "PWD=");
 	if (!(ms->old_pwd = ft_strdup(&ms->env[i][4])))
-		ft_exit(ms, line, "Failed to malloc");
+		ft_exit(ms, NULL, "Failed to malloc");
 	if (access(line, F_OK) != 0)
 	{
 		ms->first_call = 1;
@@ -55,10 +55,12 @@ void		ft_chdir(t_ms *ms, char *line)
 	}
 	else if (!chdir(line))
 	{
+		if (!getcwd(cwd, sizeof(cwd)))
+			return ;
 		if (!(ms->pwd = ft_strdup(getcwd(cwd, sizeof(cwd)))))
-			ft_exit(ms, line, "Failed to malloc");
+			ft_exit(ms, NULL, "Failed to malloc");
 		free(ms->env[i]);
 		if (!(ms->env[i] = ft_strjoin("PWD=", ms->pwd)))
-			ft_exit(ms, line, "Failed to malloc");
+			ft_exit(ms, NULL, "Failed to malloc");
 	}
 }

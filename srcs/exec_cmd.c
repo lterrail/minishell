@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 20:23:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 20:15:31 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:05:19 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int		exec_chmod(char *path)
 	return (1);
 }
 
-static void		ft_fork(t_ms *ms, char *path, char *line)
+static void		ft_fork(t_ms *ms, char *path)
 {
 	pid_t	father;
 	int		ret;
@@ -47,7 +47,7 @@ static void		ft_fork(t_ms *ms, char *path, char *line)
 		if ((ret = execve(path, ms->options, ms->env)) == -1)
 		{
 			free(path);
-			ft_exit(ms, line, "Failed to execve the program");
+			ft_exit(ms, NULL, "Failed to execve the program");
 		}
 		exit(ret);
 	}
@@ -63,9 +63,9 @@ void			ft_exec_cmd(t_ms *ms, char *path, char *line)
 	if (!(ms->options = ft_strsplit(line, ' ')))
 	{
 		free(path);
-		ft_exit(ms, line, "Failed to create ms->options");
+		ft_exit(ms, NULL, "Failed to create ms->options");
 	}
-	ft_fork(ms, path, line);
+	ft_fork(ms, path);
 	ft_free_tab(ms->options, -1);
 	ms->options = NULL;
 }

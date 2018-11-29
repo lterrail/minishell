@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 20:20:36 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 12:05:25 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,16 @@ int			ft_unsetenv(t_ms *ms, char *line)
 		return (E_ERROR);
 	while (++i < ms->len_env)
 	{
-		if (line
-			&& !ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
+		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
 		{
 			ft_printf("{red}Deleted: %s{eoc}\n", ms->env[i]);
 			free(ms->env[i]);
-			while (++i + 1 < ms->len_env)
+			while (i + 1 < ms->len_env)
 			{
 				if (!(ms->env[i] = ft_strdup(ms->env[i + 1])))
 					ft_exit(ms, NULL, "Failed to realloc each env line");
 				free(ms->env[i + 1]);
+				i++;
 			}
 			ms->len_env--;
 			ft_realloc_msenv(ms, NULL);

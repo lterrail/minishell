@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 20:23:07 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 13:55:27 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,14 @@
 
 # define E_SUCCESS 1
 # define E_ERROR 0
-# define DELETE -1
-# define HOME -2
-# define TILD -3
-# define ADD -4
-# define MOINS -5
-# define SLASH -6
 
 typedef void	(*t_sighandler)(int);
-
-int g_reset_input;
 
 typedef struct		s_ms
 {
 	char			**env;
 	char			**paths;
+	char			**argcs;
 	int				len_env;
 	char			*first_argc;
 	char			**options;

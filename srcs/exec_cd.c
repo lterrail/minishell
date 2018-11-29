@@ -6,19 +6,19 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:02:03 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 19:26:52 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:03:28 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		ft_add_oldpwd_in_env(t_ms *ms, char *line)
+static void		ft_add_oldpwd_in_env(t_ms *ms)
 {
 	char	*tmp;
 
 	tmp = NULL;
 	if (!(tmp = ft_strjoin("OLDPWD=", ms->old_pwd)))
-		ft_exit(ms, line, "Failed to malloc in ft_add_oldpwd");
+		ft_exit(ms, NULL, "Failed to malloc in ft_add_oldpwd");
 	ft_setenv(ms, tmp, 1);
 	free(tmp);
 }
@@ -58,7 +58,7 @@ static int		ft_solve_simple_case(t_ms *ms, char *line)
 	else if (line && line[0] == '~')
 	{
 		if (!(tmp = ft_strjoin(&ms->env[i][5], &line[1])))
-			ft_exit(ms, line, "Failed to malloc in ft_solve_simple_case");
+			ft_exit(ms, NULL, "Failed to malloc in ft_solve_simple_case");
 		ft_chdir(ms, tmp);
 		free(tmp);
 		return (E_ERROR);
@@ -96,5 +96,5 @@ void			ft_init_cd(t_ms *ms, char *line)
 	}
 	else
 		ft_chdir(ms, line);
-	ft_add_oldpwd_in_env(ms, line);
+	ft_add_oldpwd_in_env(ms);
 }

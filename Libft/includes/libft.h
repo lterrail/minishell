@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 16:47:48 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/24 16:49:33 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 13:53:53 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int					ft_isascii(int c);
 void				*ft_memalloc(size_t size);
 char				*ft_strnew(size_t size);
 void				ft_strdel(char **as);
-void				ft_strclr(char *s);
 int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);

@@ -6,124 +6,84 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/01 17:17:26 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/28 14:02:18 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/11/29 13:52:56 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		ft_free(int fd, t_data **l)
+static void	ft_strclr(char *s)
 {
-	t_data	*f;
-
-	f = *l;
-	if ((*l)->index == fd)
+	if (s)
 	{
-		*l = (*l)->next;
-		ft_strdel(&(f->tmp));
-		ft_strdel(&(f->line));
-		free(f);
+		while (*s)
+			*s++ = '\0';
 	}
-	else
-		ft_free(fd, &(*l)->next);
 }
 
-static int		ft_read_buf(int flag, char *buf, t_data **p, int len)
+static int	read_data(char *data, const int fd, char **line)
 {
-	int		i;
-	char	*link;
+	char	*tmp;
+	size_t	len;
 
-	i = -1;
-	while (++i < len)
+	if (fd < 0 || !line)
+		return (-1);
+	if ((tmp = ft_strchr(data, '\n')))
 	{
-		(*p)->tmp[i] = buf[i];
-		if (!flag && buf[i] == '\n' && (flag = i + 1))
-		{
-			(*p)->tmp[i] = 0;
-			if (!(link = ft_strjoin((*p)->line, (*p)->tmp)))
-				return (-1);
-		}
+		len = ft_strlen(data) - (tmp - data + 1);
+		if (!(*line = ft_strsub(data, 0, tmp - data)))
+			return (-1);
+		ft_memmove(data, tmp + 1, len);
+		ft_strclr(data + len);
+		return (1);
 	}
-	(*p)->tmp[i] = 0;
-	if (!flag)
+	*line = ft_strdup(data);
+	ft_strclr(data);
+	return ((*line) ? 0 : -1);
+}
+
+static int	save_data(int ret, char **line, char *data)
+{
+	char	*tmp;
+
+	if (ret < 0)
 	{
-		if (!(link = ft_strjoin((*p)->line, (*p)->tmp)))
+		ft_strdel(line);
+		return (-1);
+	}
+	else if (!ret && !(**line))
+	{
+		ft_strdel(line);
+		return (0);
+	}
+	else if (!(tmp = ft_strchr(*line, '\n')) && !ret)
+		return (-1);
+	ft_strcpy(data, tmp + 1);
+	ft_strclr(tmp);
+	tmp = *line;
+	*line = ft_strdup(*line);
+	free(tmp);
+	return ((*line) ? 1 : -1);
+}
+
+int			get_next_line(const int fd, char **line)
+{
+	int				ret;
+	static char		buff[BUFF_SIZE + 1];
+	char			*tmp;
+
+	if ((ret = read_data(buff, fd, line)))
+		return (ret);
+	while (!ft_strchr(buff, '\n')
+		&& (ret = read(fd, buff, BUFF_SIZE)) > 0)
+	{
+		buff[ret] = '\0';
+		tmp = *line;
+		*line = ft_strjoin(*line, buff);
+		free(tmp);
+		if (!(*line))
 			return (-1);
 	}
-	else
-		ft_memcpy((*p)->tmp, (*p)->tmp + flag, BUFF_SIZE - flag + 1);
-	ft_strdel(&((*p)->line));
-	(*p)->line = link;
-	return (flag);
-}
-
-static int		ft_reader(const int fd, t_data **p)
-{
-	int		i;
-	int		flag;
-	int		len;
-	char	buf[BUFF_SIZE + 1];
-
-	i = -1;
-	flag = 0;
-	while ((*p)->tmp[++i])
-	{
-		(*p)->line[i] = (*p)->tmp[i];
-		if ((*p)->line[i] == '\n')
-		{
-			(*p)->line[i] = 0;
-			ft_memcpy((*p)->tmp, (*p)->tmp + i + 1, BUFF_SIZE - i);
-			return (1);
-		}
-	}
-	while (!flag && (len = read(fd, buf, BUFF_SIZE)))
-	{
-		if (len == -1 || (flag = ft_read_buf(flag, buf, p, len)) == -1)
-			return (-1);
-	}
-	return (len > 0);
-}
-
-static t_data	*ft_set_p(const int fd, t_data **l)
-{
-	if ((*l) && (*l)->index != fd)
-		return (ft_set_p(fd, &(*l)->next));
-	else
-	{
-		if (!(*l))
-		{
-			if (!((*l) = malloc(sizeof(t_data))))
-				return (NULL);
-			(*l)->index = fd;
-			(*l)->line = NULL;
-			if (!((*l)->tmp = malloc(sizeof(char) * (BUFF_SIZE + 1))))
-				return (NULL);
-			ft_bzero((*l)->tmp, BUFF_SIZE + 1);
-			(*l)->next = NULL;
-		}
-		return ((*l));
-	}
-}
-
-int				get_next_line(const int fd, char **line)
-{
-	static t_data	*l;
-	t_data			*p;
-	int				state;
-
-	if (fd < 0 || !line || !(p = ft_set_p(fd, &l)))
-		return (-1);
-	if (p->line)
-		free(p->line);
-	if (!(p->line = malloc(sizeof(char) * (BUFF_SIZE + 1))))
-		return (-1);
-	ft_bzero(p->line, BUFF_SIZE + 1);
-	if ((state = ft_reader(fd, &p)) == -1)
-		return (-1);
-	*line = NULL;
-	if ((p->line[0] || state != 0) && !(*line = ft_strdup(p->line)))
-		return (-1);
-	if (!state)
-		ft_free(fd, &l);
-	return (*line != NULL || state != 0);
+	ft_strclr(buff);
+	return (save_data(ret, line, buff));
 }
