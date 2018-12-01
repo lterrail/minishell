@@ -6,13 +6,13 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 20:23:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 18:02:02 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 14:38:01 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		exec_chmod(char *path)
+static int	exec_chmod(char *path)
 {
 	struct stat	stat;
 
@@ -34,7 +34,7 @@ static int		exec_chmod(char *path)
 	return (1);
 }
 
-static void		ft_fork(t_ms *ms, char *path)
+static void	ft_fork(t_ms *ms, char *path, char **env)
 {
 	pid_t	father;
 	int		ret;
@@ -46,16 +46,18 @@ static void		ft_fork(t_ms *ms, char *path)
 		wait(&father);
 	else if (father == 0)
 	{
-		if ((ret = execve(path, ms->options, ms->env)) == -1)
+		if ((ret = execve(path, ms->options, env)) == -1)
 		{
 			free(path);
 			ft_exit(ms, NULL, "Failed to execve the program");
 		}
+		ft_free_tab(env);
 		exit(ret);
+		ms->env = env;
 	}
 }
 
-void			ft_exec_cmd(t_ms *ms, char *path, char *line)
+void		ft_exec_cmd(t_ms *ms, char *path, char *line, char **env)
 {
 	if (access(path, F_OK) != 0 || !exec_chmod(path))
 	{
@@ -72,12 +74,12 @@ void			ft_exec_cmd(t_ms *ms, char *path, char *line)
 		free(path);
 		ft_exit(ms, NULL, "Failed to create ms->options");
 	}
-	ft_fork(ms, path);
-	ft_free_tab(ms->options, -1);
+	ft_fork(ms, path, env);
+	ft_free_tab(ms->options);
 	ms->options = NULL;
 }
 
-void			ft_exec_cmd_with_path(t_ms *ms, char *path, char *line)
+void		ft_exec_cmd_with_path(t_ms *ms, char *path, char *line, char **env)
 {
 	if (access(path, F_OK) != 0 || !exec_chmod(path))
 	{
@@ -90,5 +92,5 @@ void			ft_exec_cmd_with_path(t_ms *ms, char *path, char *line)
 		return ;
 	}
 	else
-		ft_exec_cmd(ms, path, line);
+		ft_exec_cmd(ms, path, line, env);
 }

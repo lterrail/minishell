@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/16 13:56:16 by lterrail          #+#    #+#              #
-#    Updated: 2018/11/29 17:55:38 by lterrail         ###   ########.fr        #
+#    Updated: 2018/12/01 12:10:30 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC	=	main.c						\
 		chdir.c						\
 		signal.c					\
 		prints.c					\
+		env.c						\
 
 OBJ		= $(addprefix ./obj/,$(SRC:.c=.o))
 

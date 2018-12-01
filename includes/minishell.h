@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 20:14:53 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 14:34:04 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct		s_ms
 	char			**env;
 	char			**paths;
 	char			**argcs;
-	int				len_env;
 	char			*first_argc;
 	char			**options;
 	char			*prompt;
@@ -48,12 +47,12 @@ typedef struct		s_ms
 int					ft_parser(t_ms *ms, char *line);
 int					ft_find_and_copy_paths(t_ms *ms, char **env);
 void				ft_exit(t_ms *ms, char *str, char *msg);
-int					ft_unsetenv(t_ms *ms, char *line);
-void				ft_print_env(t_ms *ms, char *line);
-int					ft_setenv(t_ms *ms, char *line, int flag);
-void				ft_free_tab(char **tab, int len);
-void				ft_exec_cmd(t_ms *ms, char *path, char *line);
-void				ft_exec_cmd_with_path(t_ms *ms, char *path, char *line);
+char				**ft_unsetenv(t_ms *ms, char *line, char **env);
+void				ft_print_env(char **env);
+char				**ft_setenv(t_ms *ms, char *line, int flag, char **env);
+void				ft_free_tab(char **tab);
+void				ft_exec_cmd(t_ms *ms, char *path, char *line, char **env);
+void				ft_exec_cmd_with_path(t_ms *ms, char *path, char *line, char **env);
 void				ft_init_cd(t_ms *ms, char *line);
 void				ft_exec_cd(t_ms *ms, int flag, char *argcs);
 char				*ft_get_last_argc(char *str);
@@ -68,6 +67,8 @@ void				ft_chdir_back(t_ms *ms, char *line, int i);
 void				ft_chdir(t_ms *ms, char *line, int i);
 void				ft_signal_handler(int sig);
 void				ft_print_prompt(void);
-void				ft_delete_env(t_ms *ms);
+char				**ft_delete_env(t_ms *ms, char **env);
+void				ft_parse_env(t_ms *ms, char *line, char **env);
+int					ft_get_tablen(char **env);
 
 #endif

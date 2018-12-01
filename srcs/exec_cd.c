@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/24 17:02:03 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 19:07:03 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 12:57:48 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void		ft_add_oldpwd_in_env(t_ms *ms)
 	tmp = NULL;
 	if (!(tmp = ft_strjoin("OLDPWD=", ms->old_pwd)))
 		ft_exit(ms, NULL, "Failed to malloc in ft_add_oldpwd");
-	ft_setenv(ms, tmp, 1);
+	ft_setenv(ms, tmp, 1, ms->env);
 	free(tmp);
 }
 

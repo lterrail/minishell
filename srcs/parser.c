@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 19:41:20 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 13:41:36 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ static int		ft_parse_builtins(t_ms *ms, char *line)
 	else if (!ft_strcmp(ms->first_argc, "cd"))
 		ft_init_cd(ms, ft_epur_line(line, 2));
 	else if (!ft_strcmp(ms->first_argc, "unsetenv"))
-		ft_unsetenv(ms, ft_epur_line(line, 8));
+		ms->env = ft_unsetenv(ms, ft_epur_line(line, 8), ms->env);
 	else if (!ft_strcmp(ms->first_argc, "setenv"))
-		ft_setenv(ms, ft_epur_line(line, 6), 0);
-	else if (!ft_strcmp(line, "env -i"))
-		ft_delete_env(ms);
+		ms->env = ft_setenv(ms, ft_epur_line(line, 6), 0, ms->env);
 	else if (!ft_strcmp(ms->first_argc, "env"))
-		ft_print_env(ms, line);
+		ft_parse_env(ms, ft_epur_line(line, 3), ms->env);
 	else if (!ft_strcmp(ms->first_argc, "echo"))
 		(line = ft_epur_line(line, 4)) ? ft_printf("%s\n", line) : 0;
 	else
@@ -44,11 +42,11 @@ static void		ft_parse_cmd(t_ms *ms, char *line)
 	{
 		if (ft_strstr(path, "cat"))
 			g_reset_input = 1;
-		ft_exec_cmd(ms, path, line);
+		ft_exec_cmd(ms, path, line, ms->env);
 		free(path);
 	}
 	else if (!path)
-		ft_exec_cmd_with_path(ms, ms->first_argc, line);
+		ft_exec_cmd_with_path(ms, ms->first_argc, line, ms->env);
 	else
 		ft_printf("{red}%s: Command not found{eoc}\n", ms->first_argc);
 }

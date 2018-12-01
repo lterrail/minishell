@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/26 16:17:47 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 13:43:10 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int			ft_find_and_copy_paths(t_ms *ms, char **env)
 	j = 0;
 	if (ms->paths)
 	{
-		ft_free_tab(ms->paths, -1);
+		ft_free_tab(ms->paths);
 		ms->paths = NULL;
 	}
 	if (!env)
 		return (E_ERROR);
-	while (++i < ms->len_env)
+	while (env[++i])
 	{
 		if (ft_strstr(env[i], "PATH="))
 		{

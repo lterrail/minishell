@@ -6,33 +6,34 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 18:07:43 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 13:36:06 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		ft_delete_env(t_ms *ms)
+int			ft_get_tablen(char **env)
 {
-	ft_free_tab(ms->env, ms->len_env);
-	ms->len_env = 0;
-	if (!(ms->env = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
-		ft_exit(ms, NULL, "Failed to malloc env");
-	ms->env[ms->len_env] = NULL;
+	int		i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);
 }
 
-static void	ft_realloc_msenv(t_ms *ms, char *line)
+static char	**ft_realloc_msenv(t_ms *ms, char *line, int len_env, char **env)
 {
 	int		i;
 	char	**new;
 
 	i = 0;
 	new = NULL;
-	if (!(new = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
+	if (!(new = (char **)malloc(sizeof(char *) * (len_env + 1))))
 		ft_exit(ms, NULL, "Failed to realloc ms->env");
-	while (i < ms->len_env)
+	while (i < len_env)
 	{
-		if (line && i + 1 == ms->len_env)
+		if (line && i + 1 == len_env)
 		{
 			if (!(new[i] = ft_strdup(line)))
 				ft_exit(ms, NULL, "Failed to add setenv");
@@ -40,13 +41,13 @@ static void	ft_realloc_msenv(t_ms *ms, char *line)
 		}
 		else
 		{
-			new[i] = ms->env[i];
+			new[i] = env[i];
 			i++;
 		}
 	}
-	free(ms->env);
-	ms->env = new;
-	ms->env[ms->len_env] = NULL;
+	free(env);
+	new[i] = NULL;
+	return (new);
 }
 
 static int	ft_is_line(char *line, char *str)
@@ -59,57 +60,55 @@ static int	ft_is_line(char *line, char *str)
 	return (E_SUCCESS);
 }
 
-int			ft_setenv(t_ms *ms, char *line, int flag)
+char		**ft_setenv(t_ms *ms, char *line, int flag, char **env)
 {
 	int		i;
 
 	i = -1;
 	if (!ft_is_line(line, "setenv"))
 		return (E_ERROR);
-	while (++i < ms->len_env)
+	while (env[++i])
 	{
-		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
+		if (!ft_strncmp(env[i], line, ft_strlen_char(env[i], '=')))
 		{
 			!flag ? ft_printf("%s already exist\n", line) : 0;
-			!flag ? ft_printf(" {red}[old] -> %s\n", ms->env[i]) : 0;
-			free(ms->env[i]);
-			if (!(ms->env[i] = ft_strdup(line)))
+			!flag ? ft_printf(" {red}[old] -> %s\n", env[i]) : 0;
+			free(env[i]);
+			if (!(env[i] = ft_strdup(line)))
 				ft_exit(ms, NULL, "Failed to add new variable in env");
 			!flag ? ft_printf("{green} [new] -> %s{eoc}\n", line) : 0;
-			return (E_SUCCESS);
+			return (env);
 		}
 	}
-	ms->len_env++;
 	ft_printf("{green}Add: %s{eoc}\n", line);
-	ft_realloc_msenv(ms, line);
-	return (E_SUCCESS);
+	env = ft_realloc_msenv(ms, line, ft_get_tablen(env) + 1, env);
+	return (env);
 }
 
-int			ft_unsetenv(t_ms *ms, char *line)
+char		**ft_unsetenv(t_ms *ms, char *line, char **env)
 {
 	int		i;
 
 	i = -1;
 	if (!ft_is_line(line, "unsetenv"))
 		return (E_ERROR);
-	while (++i < ms->len_env)
+	while (env[++i])
 	{
-		if (!ft_strncmp(ms->env[i], line, ft_strlen_char(ms->env[i], '=')))
+		if (!ft_strncmp(env[i], line, ft_strlen_char(env[i], '=')))
 		{
-			ft_printf("{red}Deleted: %s{eoc}\n", ms->env[i]);
-			free(ms->env[i]);
-			while (i + 1 < ms->len_env)
+			ft_printf("{red}Deleted: %s{eoc}\n", env[i]);
+			free(env[i]);
+			while (env[i + 1])
 			{
-				if (!(ms->env[i] = ft_strdup(ms->env[i + 1])))
+				if (!(env[i] = ft_strdup(env[i + 1])))
 					ft_exit(ms, NULL, "Failed to realloc each env line");
-				free(ms->env[i + 1]);
+				free(env[i + 1]);
 				i++;
 			}
-			ms->len_env--;
-			ft_realloc_msenv(ms, NULL);
-			return (E_SUCCESS);
+			env = ft_realloc_msenv(ms, NULL, ft_get_tablen(env) - 1, env);
+			return (env);
 		}
 	}
 	ft_printf("{red}Unsetenv %s not found{eoc}\n", line);
-	return (E_ERROR);
+	return (env);
 }

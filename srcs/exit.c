@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:19 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 13:55:54 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 13:11:08 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,13 @@ void		ft_free_cd(t_ms *ms)
 	}
 }
 
-void		ft_free_tab(char **tab, int len)
+void		ft_free_tab(char **tab)
 {
 	int		i;
 
 	i = -1;
-	if (len > 0)
-	{
-		while (++i < len)
-			free(tab[i]);
-	}
-	else
-	{
-		while (tab[++i])
-			free(tab[i]);
-	}
+	while (tab[++i])
+		free(tab[i]);
 	free(tab);
 	tab = NULL;
 }
@@ -52,13 +44,13 @@ void		ft_exit(t_ms *ms, char *str, char *msg)
 	if (str)
 		free(str);
 	if (ms->env)
-		ft_free_tab(ms->env, ms->len_env);
+		ft_free_tab(ms->env);
 	if (ms->paths)
-		ft_free_tab(ms->paths, -1);
+		ft_free_tab(ms->paths);
 	if (ms->options)
-		ft_free_tab(ms->options, -1);
+		ft_free_tab(ms->options);
 	if (ms->argcs)
-		ft_free_tab(ms->argcs, -1);
+		ft_free_tab(ms->argcs);
 	if (ms->first_argc)
 		free(ms->first_argc);
 	if (ms->old_pwd)

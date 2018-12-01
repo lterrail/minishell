@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 17:54:43 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 20:23:28 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 14:33:18 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void		ft_print_paths(t_ms *ms)
 	{
 		while (ms->paths[++i])
 			ft_printf("%s\n", ms->paths[i]);
-		ft_free_tab(ms->paths, -1);
+		ft_free_tab(ms->paths);
 		ms->paths = NULL;
 	}
 	else
@@ -31,42 +31,40 @@ void		ft_print_paths(t_ms *ms)
 // static void	ft_print_env_args(char *line)
 // {
 // 	int		i;
+// 	int		j;
 //
 // 	i = 0;
-// 	while (line[i] && line[i] != '=')
+// 	j = 0;
+// 	while (line[i])
 // 	{
-// 		ft_printf("line: %s\n", line);
-// 		if (line[i] == '=')
+// 		while (line[i] && !ft_isalpha(line[i]))
+// 			i++;
+// 		while (line[i + j] && line[i + j] != '=')
+// 			j++;
+// 		while (line[i] && line[i] != ' ')
 // 		{
-// 			i--;
-// 			while (line[i] && line[i] != ' ')
-// 			{
-// 				ft_putchar(line[i]);
-// 				i++;
-// 			}
-// 			ft_putchar('\n');
+// 			ft_putchar(line[i]);
+// 			i++;
 // 		}
-// 		i++;
+// 		ft_putchar('\n');
 // 	}
 // }
 
-void		ft_print_env(t_ms *ms, char *line)
+void		ft_print_env(char **env)
 {
 	int		i;
 
 	i = 0;
-	(void)line;
-	if (!ms->env || !ms->len_env)
+	if (!env)
 	{
 		ft_printf("{red}No variable in env{eoc}\n");
 		return ;
 	}
-	while (i < ms->len_env)
+	while (env[i])
 	{
-		ft_printf("%s\n", ms->env[i]);
+		ft_printf("%s\n", env[i]);
 		i++;
 	}
-	// ft_print_env_args(line);
 }
 
 void		ft_print_prompt(void)

@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 20:19:51 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 13:45:17 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,21 @@
 static void		ft_copy_env(t_ms *ms, char **env)
 {
 	int		i;
+	int		len_env;
 
 	i = 0;
-	while (env[ms->len_env])
-		ms->len_env++;
-	if (!(ms->env = (char **)malloc(sizeof(char *) * (ms->len_env + 1))))
+	len_env = 0;
+	while (env[len_env])
+		len_env++;
+	if (!(ms->env = (char **)malloc(sizeof(char *) * (len_env + 1))))
 		ft_exit(ms, NULL, "Failed to malloc env");
-	while (i < ms->len_env)
+	while (i < len_env)
 	{
 		if (!(ms->env[i] = ft_strdup(env[i])))
 			ft_exit(ms, NULL, "Failed to malloc env");
 		i++;
 	}
-	ms->env[ms->len_env] = NULL;
+	ms->env[i] = NULL;
 }
 
 static t_ms		*ft_init_ms(t_ms *ms, char **env)
@@ -36,10 +38,8 @@ static t_ms		*ft_init_ms(t_ms *ms, char **env)
 	if (!ms)
 		ft_exit(NULL, NULL, "Failed to malloc structure ms");
 	ms->paths = NULL;
-	ms->len_env = 0;
 	ms->first_argc = NULL;
 	ms->options = NULL;
-	ms->len_env = 0;
 	ms->env = NULL;
 	ms->pwd = NULL;
 	ms->old_pwd = NULL;
@@ -59,7 +59,7 @@ static void		ft_init_parser(t_ms *ms, char *line)
 	free(line);
 	while (ms->argcs[++i])
 		ft_parser(ms, ms->argcs[i]);
-	ft_free_tab(ms->argcs, -1);
+	ft_free_tab(ms->argcs);
 }
 
 int				main(int ac, char **av, char **env)
