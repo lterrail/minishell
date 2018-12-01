@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 17:54:43 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 14:33:18 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 16:32:54 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,34 +28,12 @@ void		ft_print_paths(t_ms *ms)
 		ft_printf("{red}PATH=/ Not found{eoc}\n");
 }
 
-// static void	ft_print_env_args(char *line)
-// {
-// 	int		i;
-// 	int		j;
-//
-// 	i = 0;
-// 	j = 0;
-// 	while (line[i])
-// 	{
-// 		while (line[i] && !ft_isalpha(line[i]))
-// 			i++;
-// 		while (line[i + j] && line[i + j] != '=')
-// 			j++;
-// 		while (line[i] && line[i] != ' ')
-// 		{
-// 			ft_putchar(line[i]);
-// 			i++;
-// 		}
-// 		ft_putchar('\n');
-// 	}
-// }
-
 void		ft_print_env(char **env)
 {
 	int		i;
 
 	i = 0;
-	if (!env)
+	if (!env || !env[0])
 	{
 		ft_printf("{red}No variable in env{eoc}\n");
 		return ;

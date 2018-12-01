@@ -6,21 +6,11 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 13:36:06 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 15:38:48 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			ft_get_tablen(char **env)
-{
-	int		i;
-
-	i = 0;
-	while (env[i])
-		i++;
-	return (i);
-}
 
 static char	**ft_realloc_msenv(t_ms *ms, char *line, int len_env, char **env)
 {
@@ -81,7 +71,7 @@ char		**ft_setenv(t_ms *ms, char *line, int flag, char **env)
 		}
 	}
 	ft_printf("{green}Add: %s{eoc}\n", line);
-	env = ft_realloc_msenv(ms, line, ft_get_tablen(env) + 1, env);
+	env = ft_realloc_msenv(ms, line, ft_strtablen(env) + 1, env);
 	return (env);
 }
 
@@ -105,7 +95,7 @@ char		**ft_unsetenv(t_ms *ms, char *line, char **env)
 				free(env[i + 1]);
 				i++;
 			}
-			env = ft_realloc_msenv(ms, NULL, ft_get_tablen(env) - 1, env);
+			env = ft_realloc_msenv(ms, NULL, ft_strtablen(env) - 1, env);
 			return (env);
 		}
 	}

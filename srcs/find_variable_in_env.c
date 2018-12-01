@@ -6,20 +6,33 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 13:43:10 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 18:48:13 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			ft_find_env_variable(t_ms *ms, char *var)
+int			ft_is_variable(char *str)
+{
+	int		i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '=' && i != 0)
+			return (E_SUCCESS);
+	}
+	return (E_ERROR);
+}
+
+int			ft_find_env_variable(char **env, char *var)
 {
 	int		i;
 
 	i = 0;
-	while (ms->env[i])
+	while (env[i])
 	{
-		if (!ft_strncmp(ms->env[i], var, ft_strlen_char(ms->env[i], '=')))
+		if (!ft_strncmp(env[i], var, ft_strlen_char(env[i], '=')))
 			return (i);
 		i++;
 	}

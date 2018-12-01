@@ -6,7 +6,7 @@
 #    By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/05 16:05:37 by lterrail          #+#    #+#              #
-#    Updated: 2018/11/24 16:49:49 by lterrail         ###   ########.fr        #
+#    Updated: 2018/12/01 15:38:15 by lterrail         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,8 @@ SRCS = 		ft_atoi.c			\
 			get_next_line.c		\
 			ft_bigger_than_integer.c \
 			ft_strlen_char.c	\
+			ft_strtabdup.c		\
+			ft_strtablen.c		\
 
 SRCS	+=	$(addprefix ft_printf/, $(FT_PRINTF_SRCS))
 

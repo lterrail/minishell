@@ -6,11 +6,48 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 12:11:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 17:55:56 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 18:47:37 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int				cmd_parser_interpret_quot(char *s)
+{
+	int    diff;
+	int    i;
+
+	i = 0;
+	diff = 0;
+	while (s[i + diff])
+	{
+		while (s[i + diff] == '"' && (!(i + diff) || s[i + diff - 1] != '\\'))
+			diff++;
+		s[i] = s[i + diff];
+		if (s[i + diff])
+		i++;
+	}
+	s[i] = '\0';
+	return (EXIT_SUCCESS);
+}
+
+int				cmd_parser_echaper(char *s)
+{
+	int    diff;
+	int    i;
+
+	i = 0;
+	diff = 0;
+	while (s[i + diff])
+	{
+		if (s[i + diff] == '\\' && s[i + diff + 1] == '"')
+			diff++;
+		s[i] = s[i + diff];
+		i++;
+	}
+	s[i] = '\0';
+	return (EXIT_SUCCESS);
+}
 
 char		*ft_get_last_argc(char *str)
 {
@@ -37,7 +74,7 @@ void		ft_get_first_argc(t_ms *ms, char *line)
 	if (!(ms->first_argc = ft_strdup(line)))
 		ft_exit(ms, NULL, "Failed to create ms->argc");
 	i = 0;
-	while (ms->first_argc[i] && ft_iscmd(ms->first_argc[i]))
+	while (ms->first_argc[i] && ms->first_argc[i] != ' ')
 		i++;
 	ms->first_argc[i] = '\0';
 }

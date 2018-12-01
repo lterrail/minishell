@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 16:47:48 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 13:53:53 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 15:38:22 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,7 @@ int					ft_nbrlen(int n);
 void				ft_putnbr_base(int nbr, char *base);
 int					ft_bigger_than_integer(char *p, int i);
 int					ft_strlen_char(char *str, char c);
+int					ft_strtablen(char **env);
+char				**ft_strtabdup(char **tab);
 
 #endif

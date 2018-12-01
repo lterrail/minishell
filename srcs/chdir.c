@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 19:21:41 by lterrail          #+#    #+#             */
-/*   Updated: 2018/11/29 19:04:10 by lterrail         ###   ########.fr       */
+/*   Updated: 2018/12/01 18:00:42 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void		ft_chdir(t_ms *ms, char *line, int i)
 {
 	char	cwd[1024];
 
+	ms->first_call = 0;
 	if (!(ms->old_pwd = ft_strdup(&ms->env[i][4])))
 		ft_exit(ms, NULL, "Failed to malloc");
 	if (access(line, F_OK) != 0)
