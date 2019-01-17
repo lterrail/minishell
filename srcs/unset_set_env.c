@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 15:38:48 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/14 14:57:56 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char		**ft_setenv(t_ms *ms, char *line, int flag, char **env)
 			return (env);
 		}
 	}
-	ft_printf("{green}Add: %s{eoc}\n", line);
+	!flag ? ft_printf("{green}Add: %s{eoc}\n", line) : 0;
 	env = ft_realloc_msenv(ms, line, ft_strtablen(env) + 1, env);
 	return (env);
 }

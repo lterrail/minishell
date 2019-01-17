@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/01 12:06:49 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 18:37:25 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/17 16:20:17 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char		**ft_delete_env(t_ms *ms, char **env)
 	return (env);
 }
 
-static char **ft_refresh_variable_shlvl(t_ms *ms, char **env)
+static char	**ft_refresh_variable_shlvl(t_ms *ms, char **env)
 {
 	int		i;
 	char	*tmp;
@@ -34,7 +34,6 @@ static char **ft_refresh_variable_shlvl(t_ms *ms, char **env)
 	j = 0;
 	if ((j = ft_find_env_variable(env, "SHLVL=")))
 	{
-		ft_printf("%d\n", j);
 		while (env[j][i + 1])
 			i++;
 		if (!(tmp2 = ft_strdup(&env[j][i])))
@@ -49,6 +48,32 @@ static char **ft_refresh_variable_shlvl(t_ms *ms, char **env)
 	else
 		return (env);
 	return (env);
+}
+
+static char	**ft_exec_cmd_in_env(t_ms *ms, char **env_tmp, char **argcs, int i)
+{
+	char	*path;
+	char	*test;
+
+	path = NULL;
+	test = NULL;
+	if (!ft_strncmp(argcs[i], "minishell", ft_strlen("minishell")))
+	{
+		env_tmp = ft_refresh_variable_shlvl(ms, env_tmp);
+		ft_exec_cmd(ms, argcs[i], argcs[i], env_tmp);
+		return (env_tmp);
+	}
+	if (!(path = ft_search_valid_builtin(ms, argcs[i], env_tmp)))
+	{
+		ft_printf("{red}No such file or directory: %s{eoc}\n", argcs[i]);
+		free(path);
+		return (env_tmp);
+	}
+	if (!(test = ft_concat_params(ft_strtablen(&argcs[i]), &argcs[i])))
+		ft_exit(ms, NULL, "Failed to malloc in ft_concat_params");
+	ft_exec_cmd_with_path(ms, path, test, env_tmp);
+	free(path);
+	return (env_tmp);
 }
 
 static char	**ft_exec_env(t_ms *ms, char **env, char **env_tmp, char **argcs)
@@ -66,13 +91,9 @@ static char	**ft_exec_env(t_ms *ms, char **env, char **env_tmp, char **argcs)
 		else if (!ft_strcmp(argcs[i], "-i"))
 			env_tmp = ft_delete_env(ms, env_tmp);
 		else if (ft_is_variable(argcs[i]))
-			env_tmp = ft_setenv(ms, argcs[i], 0, env_tmp);
-		else if (!ft_strcmp(argcs[i], "minishell"))
-		{
-			env_tmp = ft_refresh_variable_shlvl(ms, env_tmp);
-			ft_exec_cmd_with_path(ms, argcs[i], argcs[i], env_tmp);
+			env_tmp = ft_setenv(ms, argcs[i], 1, env_tmp);
+		else if (ft_exec_cmd_in_env(ms, env_tmp, argcs, i))
 			return (env_tmp);
-		}
 	}
 	ft_print_env(env_tmp);
 	return (env_tmp);

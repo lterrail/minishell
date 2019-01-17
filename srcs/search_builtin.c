@@ -6,22 +6,22 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/28 18:18:08 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 16:28:08 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/14 14:30:37 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*ft_search_valid_builtin(t_ms *ms)
+char		*ft_search_valid_builtin(t_ms *ms, char *cmd, char **env)
 {
 	int		i;
 	char	*path;
 	char	*tmp;
 
 	i = -1;
-	if (!(tmp = ft_strjoin("/", ms->first_argc)))
+	if (!(tmp = ft_strjoin("/", cmd)))
 		ft_exit(ms, NULL, "Failed to malloc in ft_check_access");
-	if (ft_find_and_copy_paths(ms, ms->env))
+	if (ft_find_and_copy_paths(ms, env))
 	{
 		while (ms->paths[++i])
 		{

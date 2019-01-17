@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 18:47:30 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/17 16:01:32 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void		ft_parse_cmd(t_ms *ms, char *line)
 	path = NULL;
 	if (!ft_strcmp(ms->first_argc, "path"))
 		ft_print_paths(ms);
-	else if ((path = ft_search_valid_builtin(ms)))
+	else if ((path = ft_search_valid_builtin(ms, ms->first_argc, ms->env)))
 	{
 		if (ft_strstr(path, "cat"))
 			g_reset_input = 1;
@@ -55,13 +55,20 @@ static void		ft_parse_cmd(t_ms *ms, char *line)
 
 int				ft_parser(t_ms *ms, char *line)
 {
-	cmd_parser_echaper(line);
-	cmd_parser_interpret_quot(line);
+	int		i;
+
+	i = 0;
 	if (!line)
 		return (E_ERROR);
-	ft_get_first_argc(ms, line);
-	if (!ft_parse_builtins(ms, line))
-		ft_parse_cmd(ms, line);
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+		i++;
+	if (!line[i])
+		return (E_ERROR);
+	cmd_parser_echaper(line);
+	cmd_parser_interpret_quot(line);
+	ft_get_first_argc(ms, &line[i]);
+	if (!ft_parse_builtins(ms, &line[i]))
+		ft_parse_cmd(ms, &line[i]);
 	free(ms->first_argc);
 	return (E_SUCCESS);
 }

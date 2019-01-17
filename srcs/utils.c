@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 12:11:47 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 18:47:37 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/17 15:59:01 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int				cmd_parser_interpret_quot(char *s)
 {
-	int    diff;
-	int    i;
+	int		diff;
+	int		i;
 
 	i = 0;
 	diff = 0;
@@ -25,7 +25,7 @@ int				cmd_parser_interpret_quot(char *s)
 			diff++;
 		s[i] = s[i + diff];
 		if (s[i + diff])
-		i++;
+			i++;
 	}
 	s[i] = '\0';
 	return (EXIT_SUCCESS);
@@ -33,8 +33,8 @@ int				cmd_parser_interpret_quot(char *s)
 
 int				cmd_parser_echaper(char *s)
 {
-	int    diff;
-	int    i;
+	int		diff;
+	int		i;
 
 	i = 0;
 	diff = 0;
@@ -49,7 +49,7 @@ int				cmd_parser_echaper(char *s)
 	return (EXIT_SUCCESS);
 }
 
-char		*ft_get_last_argc(char *str)
+char			*ft_get_last_argc(char *str)
 {
 	int		i;
 
@@ -67,7 +67,7 @@ char		*ft_get_last_argc(char *str)
 	return (&str[i]);
 }
 
-void		ft_get_first_argc(t_ms *ms, char *line)
+void			ft_get_first_argc(t_ms *ms, char *line)
 {
 	int		i;
 
@@ -79,7 +79,7 @@ void		ft_get_first_argc(t_ms *ms, char *line)
 	ms->first_argc[i] = '\0';
 }
 
-char		*ft_epur_line(char *line, int len)
+char			*ft_epur_line(char *line, int len)
 {
 	int		i;
 
