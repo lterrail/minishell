@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:44 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 18:48:13 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 15:25:57 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int			ft_find_env_variable(char **env, char *var)
 	i = 0;
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], var, ft_strlen_char(env[i], '=')))
+		if (!ft_strncmp(env[i], var, ft_strlen_char(env[i], '=',
+		ft_strlen(var))))
 			return (i);
 		i++;
 	}

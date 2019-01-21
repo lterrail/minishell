@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 14:27:44 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/14 14:57:56 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 15:29:14 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ char		**ft_setenv(t_ms *ms, char *line, int flag, char **env)
 		return (E_ERROR);
 	while (env[++i])
 	{
-		if (!ft_strncmp(env[i], line, ft_strlen_char(env[i], '=')))
+		if (!ft_strncmp(line, env[i], ft_strlen_char(env[i], '=',
+		ft_strlen_char(line, '=', 0))))
 		{
 			!flag ? ft_printf("%s already exist\n", line) : 0;
 			!flag ? ft_printf(" {red}[old] -> %s\n", env[i]) : 0;
@@ -84,7 +85,8 @@ char		**ft_unsetenv(t_ms *ms, char *line, char **env)
 		return (E_ERROR);
 	while (env[++i])
 	{
-		if (!ft_strncmp(env[i], line, ft_strlen_char(env[i], '=')))
+		if (!ft_strncmp(line, env[i], ft_strlen_char(env[i], '=',
+		ft_strlen(line))))
 		{
 			ft_printf("{red}Deleted: %s{eoc}\n", env[i]);
 			free(env[i]);

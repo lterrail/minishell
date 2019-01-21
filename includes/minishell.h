@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 14:17:12 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 16:14:33 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ void				ft_signal_handler(int sig);
 */
 char				**ft_unsetenv(t_ms *ms, char *line, char **env);
 char				**ft_setenv(t_ms *ms, char *line, int flag, char **env);
+
+/*
+**echo.c
+*/
+void				ft_echo(t_ms *ms, char *line);
 
 /*
 **utils.c

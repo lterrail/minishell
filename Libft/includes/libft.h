@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 16:47:48 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/17 15:38:27 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 15:08:18 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void				ft_putstr_fd(char const *s, int fd);
 int					ft_nbrlen(int n);
 void				ft_putnbr_base(int nbr, char *base);
 int					ft_bigger_than_integer(char *p, int i);
-int					ft_strlen_char(char *str, char c);
+int					ft_strlen_char(char *str, char c, int len);
 int					ft_strtablen(char **env);
 char				**ft_strtabdup(char **tab);
 char				*ft_concat_params(int argc, char **argv);

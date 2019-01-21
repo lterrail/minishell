@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 13:27:32 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 16:11:12 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int		ft_parse_builtins(t_ms *ms, char *line)
 {
 	if (!ft_strcmp(ms->first_argc, "exit"))
 		ft_exit(ms, NULL, NULL);
-	else if (!ft_strncmp(ms->first_argc, "cd", ft_strlen(ms->first_argc)))
+	else if (!ft_strcmp(ms->first_argc, "cd"))
 		ft_init_cd(ms, ft_epur_line(line, 2));
 	else if (!ft_strcmp(ms->first_argc, "unsetenv"))
 		ms->env = ft_unsetenv(ms, ft_epur_line(line, 8), ms->env);
@@ -25,9 +25,7 @@ static int		ft_parse_builtins(t_ms *ms, char *line)
 	else if (!ft_strcmp(ms->first_argc, "env"))
 		ft_parse_env(ms, ft_epur_line(line, 3), ms->env);
 	else if (!ft_strcmp(ms->first_argc, "echo"))
-	{
-		ft_printf("%s\n", &line[4]);
-	}
+		ft_echo(ms, line);
 	else
 		return (0);
 	return (1);
