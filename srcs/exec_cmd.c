@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 20:23:47 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/14 15:21:24 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 13:27:24 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,13 @@ static void	ft_fork(t_ms *ms, char *path, char **env)
 
 void		ft_exec_cmd(t_ms *ms, char *path, char *line, char **env)
 {
-	if (access(path, F_OK) != 0 || !exec_chmod(path))
+	if ((access(path, F_OK) != 0 || !exec_chmod(path))
+		&& (access(path, X_OK) != 0 || exec_chmod(path) == 2))
+	{
+		ft_printf("{red}%s: Command not found{eoc}\n", line);
+		return ;
+	}
+	else if (access(path, F_OK) != 0 || !exec_chmod(path))
 	{
 		ft_printf("{red}No such file or directory: %s{eoc}\n", line);
 		return ;
@@ -77,20 +83,4 @@ void		ft_exec_cmd(t_ms *ms, char *path, char *line, char **env)
 	ft_fork(ms, path, env);
 	ft_free_tab(ms->options);
 	ms->options = NULL;
-}
-
-void		ft_exec_cmd_with_path(t_ms *ms, char *path, char *line, char **env)
-{
-	if (access(path, F_OK) != 0 || !exec_chmod(path))
-	{
-		ft_printf("{red}No such file or directory: %s{eoc}\n", line);
-		return ;
-	}
-	else if (access(path, X_OK) != 0 || exec_chmod(path) == 2)
-	{
-		ft_printf("{red}Permission denied: %s{eoc}\n", line);
-		return ;
-	}
-	else
-		ft_exec_cmd(ms, path, line, env);
 }

@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/17 16:01:32 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 13:27:32 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,12 @@ static void		ft_parse_cmd(t_ms *ms, char *line)
 	{
 		if (ft_strstr(path, "cat"))
 			g_reset_input = 1;
+		g_reset_input = 0;
 		ft_exec_cmd(ms, path, line, ms->env);
 		free(path);
 	}
 	else if (!path)
-		ft_exec_cmd_with_path(ms, ms->first_argc, line, ms->env);
-	else
-		ft_printf("{red}%s: Command not found{eoc}\n", ms->first_argc);
+		ft_exec_cmd(ms, ms->first_argc, line, ms->env);
 }
 
 int				ft_parser(t_ms *ms, char *line)
