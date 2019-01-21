@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 16:14:33 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 19:45:40 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,6 @@ void				ft_chdir_back(t_ms *ms, char *line, int i);
 void				ft_chdir(t_ms *ms, char *line, int i);
 
 /*
-**env.c
-*/
-char				**ft_delete_env(t_ms *ms, char **env);
-void				ft_parse_env(t_ms *ms, char *line, char **env);
-
-/*
-**exec_cd.c
-*/
-void				ft_init_cd(t_ms *ms, char *line);
-
-/*
 **exec_cmd.c
 */
 void				ft_exec_cmd(t_ms *ms, char *path, char *line, char **env);
@@ -79,6 +68,7 @@ void				ft_free_tab(char **tab);
 int					ft_is_variable(char *str);
 int					ft_find_env_variable(char **env, char *var);
 int					ft_find_and_copy_paths(t_ms *ms, char **env);
+char				*ft_find_valid_builtin(t_ms *ms, char *cmd, char **env);
 
 /*
 **parser.c
@@ -93,25 +83,39 @@ void				ft_print_env(char **env);
 void				ft_print_prompt(void);
 
 /*
-**search_builtin.c
-*/
-char				*ft_search_valid_builtin(t_ms *ms, char *cmd, char **env);
-
-/*
 **ft_signal_handler.c
 */
 void				ft_signal_handler(int sig);
 
 /*
-**unset_set_env.c
+**parse_and_clear_cmd.c
+*/
+int					cmd_parser_echaper(char *s);
+int					cmd_parser_interpret_quot(char *s);
+void				cmd_parser_dollars(t_ms *ms, char *line, int index);
+
+/*
+**builtin_echo.c
+*/
+void				ft_echo(t_ms *ms, char *line);
+
+/*
+**builtin_unset_set_env.c
 */
 char				**ft_unsetenv(t_ms *ms, char *line, char **env);
 char				**ft_setenv(t_ms *ms, char *line, int flag, char **env);
 
 /*
-**echo.c
+**builtin_env.c
 */
-void				ft_echo(t_ms *ms, char *line);
+char				**ft_delete_env(t_ms *ms, char **env);
+void				ft_parse_env(t_ms *ms, char *line, char **env);
+char				**ft_refresh_variable_shlvl(t_ms *ms, char **env);
+
+/*
+**builtin_cd.c
+*/
+void				ft_init_cd(t_ms *ms, char *line);
 
 /*
 **utils.c
@@ -119,8 +123,6 @@ void				ft_echo(t_ms *ms, char *line);
 char				*ft_epur_line(char *line, int len);
 void				ft_get_first_argc(t_ms *ms, char *line);
 char				*ft_get_last_argc(char *str);
-
-int					cmd_parser_echaper(char *s);
-int					cmd_parser_interpret_quot(char *s);
+char				*ft_strndup(const char *s1, size_t n);
 
 #endif

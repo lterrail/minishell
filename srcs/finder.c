@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_variable_in_env.c                             :+:      :+:    :+:   */
+/*   finder.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:23:44 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 15:25:57 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 19:33:12 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,31 @@ int			ft_find_and_copy_paths(t_ms *ms, char **env)
 		}
 	}
 	return (E_ERROR);
+}
+
+char		*ft_find_valid_builtin(t_ms *ms, char *cmd, char **env)
+{
+	int		i;
+	char	*path;
+	char	*tmp;
+
+	i = -1;
+	if (!(tmp = ft_strjoin("/", cmd)))
+		ft_exit(ms, NULL, "Failed to malloc in ft_check_access");
+	if (ft_find_and_copy_paths(ms, env))
+	{
+		while (ms->paths[++i])
+		{
+			if (!(path = ft_strjoin(ms->paths[i], tmp)))
+				ft_exit(ms, tmp, "Failed to malloc in ft_check_access");
+			if ((access(path, F_OK)) == 0 && access(path, X_OK) == 0)
+			{
+				free(tmp);
+				return (path);
+			}
+			free(path);
+		}
+	}
+	free(tmp);
+	return (NULL);
 }

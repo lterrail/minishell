@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/01 12:06:49 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 15:32:48 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 19:32:34 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char		**ft_delete_env(t_ms *ms, char **env)
 	return (env);
 }
 
-static char	**ft_refresh_variable_shlvl(t_ms *ms, char **env)
+char		**ft_refresh_variable_shlvl(t_ms *ms, char **env)
 {
 	int		i;
 	char	*tmp;
@@ -57,24 +57,17 @@ static char	**ft_exec_cmd_in_env(t_ms *ms, char **env_tmp, char **argcs, int i)
 
 	path = NULL;
 	concac = NULL;
-	if (!ft_strncmp(argcs[i], "minishell", ft_strlen("minishell")))
-	{
-		env_tmp = ft_refresh_variable_shlvl(ms, env_tmp);
-		ft_exec_cmd(ms, argcs[i], argcs[i], env_tmp);
-		return (env_tmp);
-	}
-	if (!(path = ft_search_valid_builtin(ms, argcs[i], env_tmp)))
-	{
-		ft_printf("{red}No such file or directory: %s{eoc}\n", argcs[i]);
-		free(path);
-		return (env_tmp);
-	}
 	if (!(concac = ft_concat_params(ft_strtablen(&argcs[i]), &argcs[i])))
-		ft_exit(ms, NULL, "Failed to malloc in ft_concat_params");
-	ft_exec_cmd(ms, path, concac, env_tmp);
+		ft_exit(ms, path, "Failed to malloc in ft_concat_params");
+	if ((path = ft_find_valid_builtin(ms, argcs[i], env_tmp)))
+	{
+		ft_exec_cmd(ms, path, concac, env_tmp);
+		free(path);
+	}
+	else
+		ft_exec_cmd(ms, argcs[i], concac, env_tmp);
 	if (concac)
 		free(concac);
-	free(path);
 	return (env_tmp);
 }
 

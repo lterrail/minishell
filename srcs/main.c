@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2018/12/01 13:45:17 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 19:32:10 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void		ft_copy_env(t_ms *ms, char **env)
 		i++;
 	}
 	ms->env[i] = NULL;
+	ms->env = ft_refresh_variable_shlvl(ms, ms->env);
 }
 
 static t_ms		*ft_init_ms(t_ms *ms, char **env)
@@ -58,7 +59,12 @@ static void		ft_init_parser(t_ms *ms, char *line)
 		ft_exit(ms, line, "Failed to malloc strplit in main");
 	free(line);
 	while (ms->argcs[++i])
+	{
+		cmd_parser_echaper(ms->argcs[i]);
+		cmd_parser_interpret_quot(ms->argcs[i]);
+		cmd_parser_dollars(ms, ms->argcs[i], i);
 		ft_parser(ms, ms->argcs[i]);
+	}
 	ft_free_tab(ms->argcs);
 }
 

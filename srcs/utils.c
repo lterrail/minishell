@@ -6,47 +6,21 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 12:11:47 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/17 15:59:01 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 19:47:10 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				cmd_parser_interpret_quot(char *s)
+char			*ft_strndup(const char *s1, size_t n)
 {
-	int		diff;
-	int		i;
+	char	*cpy;
 
-	i = 0;
-	diff = 0;
-	while (s[i + diff])
-	{
-		while (s[i + diff] == '"' && (!(i + diff) || s[i + diff - 1] != '\\'))
-			diff++;
-		s[i] = s[i + diff];
-		if (s[i + diff])
-			i++;
-	}
-	s[i] = '\0';
-	return (EXIT_SUCCESS);
-}
-
-int				cmd_parser_echaper(char *s)
-{
-	int		diff;
-	int		i;
-
-	i = 0;
-	diff = 0;
-	while (s[i + diff])
-	{
-		if (s[i + diff] == '\\' && s[i + diff + 1] == '"')
-			diff++;
-		s[i] = s[i + diff];
-		i++;
-	}
-	s[i] = '\0';
-	return (EXIT_SUCCESS);
+	if (!(cpy = (char *)malloc(sizeof(char) * (n + 1))))
+		return (NULL);
+	ft_strncpy(cpy, s1, n);
+	cpy[n] = '\0';
+	return (cpy);
 }
 
 char			*ft_get_last_argc(char *str)
