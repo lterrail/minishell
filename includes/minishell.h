@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/17 15:41:50 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/21 14:17:12 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void				ft_init_cd(t_ms *ms, char *line);
 /*
 **exec_cmd.c
 */
-void				ft_exec_cmd_with_path(t_ms *ms, char *path,
-					char *line, char **env);
 void				ft_exec_cmd(t_ms *ms, char *path, char *line, char **env);
 
 /*
