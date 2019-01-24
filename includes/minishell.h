@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 12:25:07 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 19:45:40 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/24 12:41:56 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void				ft_signal_handler(int sig);
 */
 int					cmd_parser_echaper(char *s);
 int					cmd_parser_interpret_quot(char *s);
-void				cmd_parser_dollars(t_ms *ms, char *line, int index);
+int					cmd_parser_dollars(t_ms *ms, char *line, int index);
 
 /*
 **builtin_echo.c

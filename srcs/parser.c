@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 12:24:32 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 19:32:18 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/24 12:42:37 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,9 @@ static void		ft_parse_cmd(t_ms *ms, char *line)
 
 int				ft_parser(t_ms *ms, char *line)
 {
-	int		i;
-
-	i = 0;
-	if (!line)
-		return (E_ERROR);
-	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
-		i++;
-	if (!line[i])
-		return (E_ERROR);
-	ft_get_first_argc(ms, &line[i]);
-	if (!ft_parse_builtins(ms, &line[i]))
-		ft_parse_cmd(ms, &line[i]);
+	ft_get_first_argc(ms, line);
+	if (!ft_parse_builtins(ms, line))
+		ft_parse_cmd(ms, line);
 	free(ms->first_argc);
 	return (E_SUCCESS);
 }

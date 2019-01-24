@@ -6,11 +6,25 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 19:09:11 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 19:46:02 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/24 12:46:50 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*cmd_remove_first_spaces(char *line)
+{
+	int		i;
+
+	i = 0;
+	if (!line)
+		return (NULL);
+	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
+		i++;
+	if (!line[i])
+		return (NULL);
+	return (&line[i]);
+}
 
 static void	cmd_parser_dollars_process(t_ms *ms, char **tab, int i, int j)
 {
@@ -35,7 +49,7 @@ static void	cmd_parser_dollars_process(t_ms *ms, char **tab, int i, int j)
 	}
 }
 
-void		cmd_parser_dollars(t_ms *ms, char *line, int index)
+int			cmd_parser_dollars(t_ms *ms, char *line, int index)
 {
 	int		i;
 	int		j;
@@ -43,6 +57,8 @@ void		cmd_parser_dollars(t_ms *ms, char *line, int index)
 
 	i = -1;
 	tab = NULL;
+	if (!(line = cmd_remove_first_spaces(line)))
+		return (E_ERROR);
 	if (!(tab = ft_strsplit(line, ' ')))
 		ft_exit(ms, NULL, "Failed to ft_strsplit in cmd_parser_dollars\n");
 	while (tab[++i])
@@ -55,6 +71,7 @@ void		cmd_parser_dollars(t_ms *ms, char *line, int index)
 	if (!(ms->argcs[index] = ft_concat_params(ft_strtablen(tab), tab)))
 		ft_exit(ms, NULL, "Failed to ft_concat_params in cmd_parser_dollars\n");
 	ft_free_tab(tab);
+	return (E_SUCCESS);
 }
 
 int			cmd_parser_interpret_quot(char *s)

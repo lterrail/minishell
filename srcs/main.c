@@ -6,7 +6,7 @@
 /*   By: lterrail <lterrail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 20:07:10 by lterrail          #+#    #+#             */
-/*   Updated: 2019/01/21 19:32:10 by lterrail         ###   ########.fr       */
+/*   Updated: 2019/01/24 12:41:45 by lterrail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ static void		ft_init_parser(t_ms *ms, char *line)
 	{
 		cmd_parser_echaper(ms->argcs[i]);
 		cmd_parser_interpret_quot(ms->argcs[i]);
-		cmd_parser_dollars(ms, ms->argcs[i], i);
-		ft_parser(ms, ms->argcs[i]);
+		if (cmd_parser_dollars(ms, ms->argcs[i], i))
+			ft_parser(ms, ms->argcs[i]);
 	}
 	ft_free_tab(ms->argcs);
 }
